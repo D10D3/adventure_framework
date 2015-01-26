@@ -1,0 +1,50 @@
+Current Features:
+	Play:
+		Navigable map of rooms
+		Room inventories
+		Examine objects and locations
+	System:
+		Restart Game
+		Help Info
+		Exit Game
+		
+Future Features (1st Priority):
+	Play:
+		If first time in room: long description
+		If seen before: short description
+		Player Inventory
+		Object Inventories (like a box of things)
+		Pick up and drop objects
+		game status list (events triggered)
+		Triggerable Events
+	System:
+		Set Verbose (always long room description)
+		Set Brief	(Unset Verbose)
+		
+Future Features (2nd Priority:
+	Play:
+		Player Stats
+		Equip gear and weapons
+		consume foods and drink
+		Dangerous Events
+		Static Enemies
+		
+Future Features (3rd Priority)
+	Play:
+		Wandering Enemies (with defined map boundaries)
+		NPCs with Dialogue Trees
+		Money
+		Shops with static goods
+		Eat and Drink
+		Time based on number of turns (day, night, ect...)
+		wait command
+	System:
+		Save Game
+		Load Game
+		Score
+
+Future Features (4th Priority)
+	Play:
+		Economy(?)
+		Shops with shifting goods lists
+		Magic
