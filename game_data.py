@@ -211,7 +211,7 @@ class words(object):
 	profanity = [
 		"fuck",
 		"fucker",
-		"motherfucker"
+		"motherfucker",
 		"shit",
 		"damn",
 		"bitch",
@@ -225,7 +225,7 @@ class words(object):
 		"fag",
 		"bastard",
 		"slut",
-		"douche",
+		"douche"
 		]
 
 	current_place_words = [
