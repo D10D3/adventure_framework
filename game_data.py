@@ -1,19 +1,15 @@
 
-class room_reader(object): #accepts the location and prints out a description of it
-	def describe_room(self,location):
-		print location.data['title']
-		print location.data['short_description']
-		for item in location.inventory.keys():
-			for placed in location.inventory_placed.keys():
-				if item == placed:
-					print location.inventory_placed[item]
-				else:
-					pass
-		exits_list = "Exits: "
-		for key in location.exits:
-			exits_list += key
-			exits_list += ", "
-		print exits_list
+
+#		***	Game States		***
+class system():
+	brief = True #True = brief description, False = Verbose
+	
+	rooms_visited = [] 
+	
+	settings = [brief,rooms_visited]
+
+
+#		***	Room Classes		***
 		
 class default_room(object): #parent for room classes, fills in missing info with place holders
 	data = {
@@ -33,8 +29,6 @@ class default_room(object): #parent for room classes, fills in missing info with
 	objects = {
 		"Nothing":"there isn't anything here"
 		}	
-		
-#		***	Begin Room Classes		***
 		
 class testroom1(default_room):
 	data = {
@@ -113,7 +107,7 @@ class testroom3(default_room):
 			location = testroom1()
 		return location
 
-#		***	Begin Word Lists		***
+#		***	Word Lists		***
 
 class words(object):
 		

@@ -10,8 +10,9 @@ Current Features:
 		
 Future Features (1st Priority):
 	Play:
-		If first time in room: long description
-		If seen before: short description
+		north and n both move (+south ect...)
+		*If first time in room: long description
+		*If seen before: short description
 		Player Inventory
 		Object Inventories (like a box of things)
 		Pick up and drop objects

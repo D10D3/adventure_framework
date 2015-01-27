@@ -1,12 +1,39 @@
 import game_data
 
+class engine(object):
+
+	def describe_room(self,location,system): #accepts the location and prints out a description of it
+		print location.data['title']
+		print location.data['short_description']		
+		#if new room, or verbose, print long description
+		if location.data['title'] not in game_data.system.rooms_visited:
+			game_data.system.rooms_visited.append(location.data['title'])
+			for i in location.long_description:
+				print i
+			print ""
+		elif game_data.system.brief == False:
+			for i in location.long_description:
+				print i
+			print ""
+		#describe room inventory
+		for item in location.inventory.keys():
+			for placed in location.inventory_placed.keys():
+				if item == placed:
+					print location.inventory_placed[item]
+
+		exits_list = "Exits: "
+		for key in location.exits:
+			exits_list += key
+			exits_list += ", "
+		print exits_list
+
 class reader(object): #Various parsers for acting on user input
 	
 	def break_words(self,action): #breaks 'action' input into a list of words
 		words = action.split(' ')
 		return words
 
-	def exit(self,action,location): #checks input to see if it's a move order
+	def exit(self,action,location,system): #checks input to see if it's a move order
 		#we are checking for three things here:
 		#	is the user input just trying to look at an exit?
 		#	If not, is the input on the list of possible nav commands?
@@ -50,14 +77,10 @@ class reader(object): #Various parsers for acting on user input
 			for i in profanity:
 				if action_word == i:
 					cursing += 1
-				else:
-					pass
 		if cursing:
 			print "Such language!"
-		else:
-			pass
 			
-	def system(self,action): #checks for system commands
+	def system(self,action,system): #checks for system commands
 		system_commands = game_data.words.system_commands
 		is_system = 0 #assume action is not a system command
 		system_action = "" #sets space for detected system command
@@ -66,8 +89,7 @@ class reader(object): #Various parsers for acting on user input
 				if action_word == i:
 					system_action = action_word
 					is_system += 1
-				else:
-					pass
+
 		if is_system:
 			if action_word == "inv?":
 				for inv_word in game_data.words.inventory_commands:
@@ -77,9 +99,11 @@ class reader(object): #Various parsers for acting on user input
 			elif action_word == "save":
 				print "Command not yet implemented"
 			elif action_word == "verbose":
-				print "Command not yet implemented"
+				game_data.system.brief = False
+				print "Setting Verbose, Always give full room description"
 			elif action_word == "brief":
-				print "Command not yet implemented"
+				game_data.system.brief = True
+				print "Setting brief, Only give room full description on first visit"
 			elif action_word == "score":
 				print "Command not yet implemented"
 			elif action_word == "restart":
@@ -97,18 +121,14 @@ class reader(object): #Various parsers for acting on user input
 				print "	inv? : Lists inventory commands the player can use"
 				print "	load : Command not yet implemented"
 				print "	save : Command not yet implemented"
-				print "	verbose : Command not yet implemented"
-				print "	brief : Command not yet implemented"
+				print "	verbose : Always give full room description"
+				print "	brief : Only give room full description on first visit"
 				print "	score : Command not yet implemented"
 				print "	restart : Restarts the game"
 				print "	help or ? : Displays this information"
 				print "	exit or quit or q : Exits the game"
-			else:
-				pass
-		else:
-			pass
 			
-	def look_at(self,action,location): #checks for description query
+	def look_at(self,action,location,system): #checks for description query
 		#first we get a list of describer words, and all of the location nouns
 		describers = game_data.words.describers
 		inventory = location.inventory.keys()
@@ -127,16 +147,12 @@ class reader(object): #Various parsers for acting on user input
 				if action_word == i:
 					look_word = i
 					looking_present += 1
-				else:
-					pass
 		
 		for action_word in action:
 			for noun in nouns:
 				if action_word == noun:
 					thing = action_word
 					noun_present += 1
-				else:
-					pass
 		
 		if looking_present:
 			if noun_present:
@@ -151,8 +167,6 @@ class reader(object): #Various parsers for acting on user input
 					print "You will need to go %s to find out what is there" % thing
 			if not noun_present:
 				print "%s?" % look_word
-		else:
-			pass
 				
 	def recognized(self,action): #checks input against all word lists, returns error message if unknown
 		game_datas = game_data.words.wordlists
@@ -163,11 +177,7 @@ class reader(object): #Various parsers for acting on user input
 				for action_word in action:
 					if action_word == word:
 						known_word += 1
-					else:
-						pass
 		
 		if not known_word:
 			print "I don't understand that."
-		else:
-			pass
 		
