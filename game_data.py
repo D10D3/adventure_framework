@@ -57,6 +57,10 @@ class testroom1(default_room):
 		self.exit = exit
 		if exit == 'north':
 			location = testroom2()
+		elif exit == 'n':
+			location = testroom2()
+		elif exit == 'e':
+			location = testroom3()
 		else:
 			location = testroom3()
 		return location
