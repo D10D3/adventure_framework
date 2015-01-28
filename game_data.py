@@ -8,108 +8,124 @@ class system():
 	
 	settings = [brief,rooms_visited]
 
-
 #		***	Room Classes		***
+class map():
 		
-class default_room(object): #parent for room classes, fills in missing info with place holders
-	data = {
-		"title" : "Undefined Room",
-		"short_description" : "A white empty room",
-		}
-	long_description = [
-		"This is a white nondescript space awaiting data to describe it, ",
-		"Like the 'Construct' in The Matrix"
-		]
-	inventory = {
-		"nothing":"there is nothing there"
-		}
-	inventory_placed = {
-		"nothing":" ",
-		}
-	objects = {
-		"Nothing":"there isn't anything here"
-		}	
-		
-class testroom1(default_room):
-	data = {
-		"title" : "Study",
-		"short_description" : "A small study",
-		}
-	long_description = [
-		"This is a small but cozy study with book shelves,",
-		"a wingback chair and a phonograph"
-		]
-	inventory = {
-		"record":"This is a resin platter record in a sleeve labeled 'Blue Danube'",
-		"Emma":"This fat grey tabby cat has a tag that reads 'Emma'"
-		}
-	inventory_placed = {
-		"record":"There is a record by the phonograph",
-		"Emma":"There is a cat curled up on the chair named Emma"
-		}
-	objects = {
-		"chair":"This is a large wingback style chair upholstered in red velvet.",
-		"phonograph":"This is a cabinet style phonograph with a large hand-crank"
-		}
-	exits = ['north','east']
-
-	def transition(self,exit):
-		self.exit = exit
-		if exit == 'north':
-			location = testroom2()
-		elif exit == 'n':
-			location = testroom2()
-		elif exit == 'e':
-			location = testroom3()
-		else:
-			location = testroom3()
-		return location
-		
-class testroom2(default_room):
-	data = {
-		"title" : "testroom2",
-		"short_description" : "This is testroom2, It's a little dirty",
-		}
-	inventory = {
-		"guitar":"a 1968 Harmoy Rocket hollow body guitar",
-		"Tidbit":"a black and white cat who loves cheese"
-		}
-	objects = {
-		"car":"A 1985 Buick Grand National",
-		"futon":"A cheap futon from ikea"
-		}
-	exits = ['south','east']
+	class default_room(object): #parent for room classes, fills in missing info with place holders
+		title = "Undefined Room"
+		short_description = "A white empty room"
+		long_description = [
+			"This is a white nondescript space awaiting data to describe it, ",
+			"Like the 'Construct' in The Matrix"
+			]
+		inventory = {
+			"nothing":"there is nothing there"
+			}
+		inventory_placed = {
+			"nothing":" ",
+			}
+		objects = {
+			"Nothing":"there isn't anything here"
+			}	
+			
+	class testroom1(map):
+		#map = game_data.map()
+		title = "Study"
+		short_description = "A small study"
+		long_description = [
+			"This is a small but cozy study with book shelves,",
+			"a wingback chair and a phonograph"
+			]
+		inventory = {
+			"record":"This is a resin platter record in a sleeve labeled 'Blue Danube'",
+			"Emma":"This fat grey tabby cat has a tag that reads 'Emma'"
+			}
+		inventory_placed = {
+			"record":"There is a record by the phonograph",
+			"Emma":"There is a cat curled up on the chair named Emma"
+			}
+		objects = {
+			"chair":"This is a large wingback style chair upholstered in red velvet.",
+			"phonograph":"This is a cabinet style phonograph with a large hand-crank"
+			}
+		exits = {
+			'north' : testroom2(),
+			'n' : testroom2(),
+			'e' : testroom3(),
+			'east' : testroom3()
+			}
+		# exits = {
+			# 'north' : "testroom2",
+			# 'n' : "testroom2",
+			# 'e' : "testroom3",
+			# 'east' : "testroom3"
+			# }
+			
+	class testroom2(default_room):
+		title = "testroom2"
+		short_description = "This is testroom2, It's a little dirty"
+		inventory = {
+			"guitar":"a 1968 Harmoy Rocket hollow body guitar",
+			"Tidbit":"a black and white cat who loves cheese"
+			}
+		objects = {
+			"car":"A 1985 Buick Grand National",
+			"futon":"A cheap futon from ikea"
+			}
+		exits = {
+			'south' : "testroom1",
+			's' : "testroom1",
+			'e' : "testroom3",
+			'east' : "testroom3"
+			}
+			
+	class testroom3(default_room):
+		title = "testroom3"
+		short_description = "This is testroom3, it smells like lemons"
+		inventory = {
+			"pledge":"can of a lemony all all purpose surface cleaner",
+			"Noosa":"a fluffy white cat"
+			}
+		objects = {
+			"piano":"a black baby grand piano",
+			"tardis":"a blue policebox, it may travel in time and space"
+			}
+		exits = {
+			'north' : "testroom2",
+			'n' : "testroom2",
+			's' : "testroom1",
+			'south' : "testroom1"
+			}
+	# exits = {
+		# testroom1 = {
+			# 'north' : testroom2(),
+			# 'n' : testroom2(),
+			# 'e' : testroom3(),
+			# 'east' : testroom3()
+			# }
+		# testroom2 = {
+			# 'south' : testroom1(),
+			# 's' : testroom1(),
+			# 'e' : testroom3(),
+			# 'east' : testroom3()
+			# }
+		# testroom3 = {
+			# 'north' : testroom2(),
+			# 'n' : testroom2(),
+			# 's' : testroom1(),
+			# 'south' : testroom1()
+			# }
+	room_list = [
+	testroom1(),
+	testroom2(),
+	testroom3()
+	]
 	
-	def transition(self,exit):
-		self.exit = exit
-		if exit == 'south':
-			location = testroom1()
-		else:
-			location = testroom3()
-		return location
-		
-class testroom3(default_room):
-	data = {
-		"title" : "testroom3",
-		"short_description" : "This is testroom3, it smells like lemons",
-		}
-	inventory = {
-		"pledge":"can of a lemony all all purpose surface cleaner",
-		"Noosa":"a fluffy white cat"
-		}
-	objects = {
-		"piano":"a black baby grand piano",
-		"tardis":"a blue policebox, it may travel in time and space"
-		}
-	exits = ['north','south']
-
-	def transition(self,exit):
-		self.exit = exit
-		if exit == 'north':
-			location = testroom2()
-		else:
-			location = testroom1()
-		return location
+	# room_list = {
+	# "testroom1":testroom1(),
+	# "testroom2":testroom2(),
+	# "testroom3":testroom3()
+	# }
 
 #		***	Word Lists		***
 

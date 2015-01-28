@@ -2,12 +2,12 @@ import game_data
 
 class engine(object):
 
-	def describe_room(self,location,system): #accepts the location and prints out a description of it
-		print location.data['title']
-		print location.data['short_description']		
+	def describe_room(self,location,system): #print description from room data
+		print location.title
+		print location.short_description
 		#if new room, or verbose, print long description
-		if location.data['title'] not in game_data.system.rooms_visited:
-			game_data.system.rooms_visited.append(location.data['title'])
+		if location.title not in game_data.system.rooms_visited:
+			game_data.system.rooms_visited.append(location.title)
 			for i in location.long_description:
 				print i
 			print ""
@@ -27,26 +27,27 @@ class engine(object):
 			exits_list += ", "
 		print exits_list
 
-class reader(object): #Various parsers for acting on user input
+class parser(object): #Various parsers for acting on user input
 	
 	def break_words(self,action): #breaks 'action' input into a list of words
 		words = action.split(' ')
 		return words
 
-	def exit(self,action,location,system): #checks input to see if it's a move order
+	def exit(self,action,location,system,map): #checks input to see if it's a move order
+		#we are checking for three things here:
 		#we are checking for three things here:
 		#	is the user input just trying to look at an exit?
 		#	If not, is the input on the list of possible nav commands?
 		#	if so, is it actually a valid exit for this location?
 		#		detected look-direction inputs are ignored, 
-		#		reader.look_at will also detect this and issue and error message
+		#		parser.look_at will also detect this and issue and error message
 		#if all of those are satisfied and it's a good command, the location is changed
 		describers = game_data.words.describers
 		nav_commands = game_data.words.nav_commands
 		exitcheck = 0#these three are holders for checking input against lists
 		navcheck = 0 #we start assuming they are not on the list
 		looking_present = 0
-		
+		going_to = ""
 		for action_word in action: #start processing user input
 			for look in describers:#are you just trying to look at an exit?
 				if action_word == look:
@@ -57,6 +58,7 @@ class reader(object): #Various parsers for acting on user input
 					for exit in location.exits: #is it on the list of exits for this location?
 						if action_word == exit:
 							exitcheck += 1
+							going_to = exit.keys()
 							
 		#having determined if input is just looking, is a nav command, and is on the exit list
 		#we now start acting on that info
@@ -67,7 +69,7 @@ class reader(object): #Various parsers for acting on user input
 				else:
 					print ""
 					print "You go %s" % action_word
-					location = location.transition(action_word)
+					location = going_to
 		return location
 		
 	def profanity(self,action): #checks for profanity
@@ -168,7 +170,7 @@ class reader(object): #Various parsers for acting on user input
 			if not noun_present:
 				print "%s?" % look_word
 				
-	def recognized(self,action): #checks input against all word lists, returns error message if unknown
+	def recognized(self,action): #is known word? error message if not
 		game_datas = game_data.words.wordlists
 		known_word = 0
 		
