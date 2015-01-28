@@ -22,14 +22,16 @@ class map():
 			"nothing":"there is nothing there"
 			}
 		inventory_placed = {
-			"nothing":" ",
+			"nothing":"There are no visible objects",
 			}
 		objects = {
 			"Nothing":"there isn't anything here"
-			}	
+			}
+		exits = {
+			'up' : "testroom1"
+			}
 			
 	class testroom1(default_room):
-		#map = game_data.map()
 		title = "Study"
 		short_description = "A small study"
 		long_description = [
@@ -48,16 +50,6 @@ class map():
 			"chair":"This is a large wingback style chair upholstered in red velvet.",
 			"phonograph":"This is a cabinet style phonograph with a large hand-crank"
 			}
-		# exits = {
-			# 'north' : testroom2(),
-			# 'n' : testroom2(),
-			# 'e' : testroom3(),
-			# 'east' : testroom3()
-			# }
-		# exits = {
-			# "testroom2":'north',
-			# "testroom3":'east'
-			# }
 		exits = {
 			'north' : "testroom2",
 			'n' : "testroom2",
@@ -69,8 +61,12 @@ class map():
 		title = "testroom2"
 		short_description = "This is testroom2, It's a little dirty"
 		inventory = {
-			"guitar":"a 1968 Harmoy Rocket hollow body guitar",
-			"Tidbit":"a black and white cat who loves cheese"
+			"guitar":"It's a 1968 Harmoy Rocket hollow body guitar",
+			"Tidbit":"This is black and white cat who loves cheese"
+			}
+		inventory_placed = {
+			"guitar":"A guitar leans against the wall.",
+			"Tidbit":"There is a cat named Tidbit"
 			}
 		objects = {
 			"car":"A 1985 Buick Grand National",
@@ -91,8 +87,12 @@ class map():
 			"Noosa":"a fluffy white cat"
 			}
 		objects = {
-			"piano":"a black baby grand piano",
-			"tardis":"a blue policebox, it may travel in time and space"
+			"piano":"It is a black baby grand piano",
+			"tardis":"It's a blue policebox, it may travel in time and space"
+			}
+		inventory_placed = {
+			"piano":"A piano sits by the tardis",
+			"tardis":"A tardis stands in the corner"
 			}
 		exits = {
 			'north' : "testroom2",
@@ -100,36 +100,12 @@ class map():
 			's' : "testroom1",
 			'south' : "testroom1"
 			}
-	# exits = {
-		# testroom1 = {
-			# 'north' : testroom2(),
-			# 'n' : testroom2(),
-			# 'e' : testroom3(),
-			# 'east' : testroom3()
-			# }
-		# testroom2 = {
-			# 'south' : testroom1(),
-			# 's' : testroom1(),
-			# 'e' : testroom3(),
-			# 'east' : testroom3()
-			# }
-		# testroom3 = {
-			# 'north' : testroom2(),
-			# 'n' : testroom2(),
-			# 's' : testroom1(),
-			# 'south' : testroom1()
-			# }
-	# room_list = [
-	# testroom1(),
-	# testroom2(),
-	# testroom3()
-	# ]
 	
 	room_list = {
-	"testroom1":testroom1(),
-	"testroom2":testroom2(),
-	"testroom3":testroom3()
-	}
+		"testroom1":testroom1(),
+		"testroom2":testroom2(),
+		"testroom3":testroom3()
+		}
 
 #		***	Word Lists		***
 

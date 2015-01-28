@@ -33,6 +33,7 @@ class parser(object): #Various parsers for acting on user input
 	
 	def break_words(self,action): #breaks 'action' input into a list of words
 		words = action.split(' ')
+		print"" #dumb, but helps formatting
 		return words
 
 	def exit(self,action,location,system_data,map_data): #checks input to see if it's a move order
@@ -60,7 +61,6 @@ class parser(object): #Various parsers for acting on user input
 						navcheck += 1
 					for exit in location.exits: #is it on the list of exits for this location?
 						exitkey = location.exits[exit]
-						#print "exitkey = %s" % exitkey
 						if action_word == exit:
 							exitcheck += 1
 							going_to = exitkey
