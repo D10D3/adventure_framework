@@ -28,7 +28,7 @@ class map():
 			"Nothing":"there isn't anything here"
 			}	
 			
-	class testroom1(map):
+	class testroom1(default_room):
 		#map = game_data.map()
 		title = "Study"
 		short_description = "A small study"
@@ -48,18 +48,22 @@ class map():
 			"chair":"This is a large wingback style chair upholstered in red velvet.",
 			"phonograph":"This is a cabinet style phonograph with a large hand-crank"
 			}
-		exits = {
-			'north' : testroom2(),
-			'n' : testroom2(),
-			'e' : testroom3(),
-			'east' : testroom3()
-			}
 		# exits = {
-			# 'north' : "testroom2",
-			# 'n' : "testroom2",
-			# 'e' : "testroom3",
-			# 'east' : "testroom3"
+			# 'north' : testroom2(),
+			# 'n' : testroom2(),
+			# 'e' : testroom3(),
+			# 'east' : testroom3()
 			# }
+		# exits = {
+			# "testroom2":'north',
+			# "testroom3":'east'
+			# }
+		exits = {
+			'north' : "testroom2",
+			'n' : "testroom2",
+			'e' : "testroom3",
+			'east' : "testroom3"
+			}
 			
 	class testroom2(default_room):
 		title = "testroom2"
@@ -115,17 +119,17 @@ class map():
 			# 's' : testroom1(),
 			# 'south' : testroom1()
 			# }
-	room_list = [
-	testroom1(),
-	testroom2(),
-	testroom3()
-	]
+	# room_list = [
+	# testroom1(),
+	# testroom2(),
+	# testroom3()
+	# ]
 	
-	# room_list = {
-	# "testroom1":testroom1(),
-	# "testroom2":testroom2(),
-	# "testroom3":testroom3()
-	# }
+	room_list = {
+	"testroom1":testroom1(),
+	"testroom2":testroom2(),
+	"testroom3":testroom3()
+	}
 
 #		***	Word Lists		***
 

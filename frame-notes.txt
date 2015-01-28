@@ -3,6 +3,8 @@ Current Features:
 		Navigable map of rooms
 		Room inventories
 		Examine objects and locations
+		If first time in room: long description
+		If seen before: short description
 	System:
 		Restart Game
 		Help Info
@@ -11,8 +13,6 @@ Current Features:
 Future Features (1st Priority):
 	Play:
 		north and n both move (+south ect...)
-		*If first time in room: long description
-		*If seen before: short description
 		Player Inventory
 		Object Inventories (like a box of things)
 		Pick up and drop objects
@@ -49,3 +49,30 @@ Future Features (4th Priority)
 		Economy(?)
 		Shops with shifting goods lists
 		Magic
+		
+		
+Give each definition a dictionary of exits like:
+    exits = {'north': testroom1(),
+             'south': testroom2()}
+    default_exit = testroom3()
+In default room have a transition method that's like:
+    def transition(self, exit):
+        self.exit = exit
+        if exit in exits:
+            return exits[exit]
+        else:
+            return default_exit
+
+This is really rough. You can fix it up.
+
+Also, I would recommend giving your game engine a "map", 
+somewhat like how Zed Shaw did in the text adventure in Hard Way. 
+Rather than having rooms create rooms keep a dictionary of rooms 
+in the engine that is called when the program start. Something 
+like {"den": room1(), "kitchen": room2()...}
+
+That way you can just have something like
+
+current_location = self.map["den"]
+
+So you only initialize the rooms when the game first starts.

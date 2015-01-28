@@ -2,16 +2,17 @@ import game_data
 
 class engine(object):
 
-	def describe_room(self,location,system): #print description from room data
+	def describe_room(self,location,system_data): #print description from room data
+		print ""
 		print location.title
 		print location.short_description
 		#if new room, or verbose, print long description
-		if location.title not in game_data.system.rooms_visited:
-			game_data.system.rooms_visited.append(location.title)
+		if location.title not in system_data.rooms_visited:
+			system_data.rooms_visited.append(location.title)
 			for i in location.long_description:
 				print i
 			print ""
-		elif game_data.system.brief == False:
+		elif system_data.brief == False:
 			for i in location.long_description:
 				print i
 			print ""
@@ -26,6 +27,7 @@ class engine(object):
 			exits_list += key
 			exits_list += ", "
 		print exits_list
+		print ""
 
 class parser(object): #Various parsers for acting on user input
 	
@@ -33,7 +35,7 @@ class parser(object): #Various parsers for acting on user input
 		words = action.split(' ')
 		return words
 
-	def exit(self,action,location,system,map): #checks input to see if it's a move order
+	def exit(self,action,location,system_data,map_data): #checks input to see if it's a move order
 		#we are checking for three things here:
 		#we are checking for three things here:
 		#	is the user input just trying to look at an exit?
@@ -48,6 +50,7 @@ class parser(object): #Various parsers for acting on user input
 		navcheck = 0 #we start assuming they are not on the list
 		looking_present = 0
 		going_to = ""
+		
 		for action_word in action: #start processing user input
 			for look in describers:#are you just trying to look at an exit?
 				if action_word == look:
@@ -56,20 +59,24 @@ class parser(object): #Various parsers for acting on user input
 					if action_word == nav:
 						navcheck += 1
 					for exit in location.exits: #is it on the list of exits for this location?
+						exitkey = location.exits[exit]
+						#print "exitkey = %s" % exitkey
 						if action_word == exit:
 							exitcheck += 1
-							going_to = exit.keys()
+							going_to = exitkey
 							
 		#having determined if input is just looking, is a nav command, and is on the exit list
 		#we now start acting on that info
-		if not looking_present: 
+		if not looking_present:
 			if navcheck:
 				if not exitcheck:
 					print "You can't go that way"
 				else:
 					print ""
 					print "You go %s" % action_word
-					location = going_to
+					for room in map_data.room_list:
+						if room == going_to:
+							location = map_data.room_list[going_to]
 		return location
 		
 	def profanity(self,action): #checks for profanity
@@ -82,7 +89,7 @@ class parser(object): #Various parsers for acting on user input
 		if cursing:
 			print "Such language!"
 			
-	def system(self,action,system): #checks for system commands
+	def system(self,action,system_data): #checks for system commands
 		system_commands = game_data.words.system_commands
 		is_system = 0 #assume action is not a system command
 		system_action = "" #sets space for detected system command
@@ -101,10 +108,10 @@ class parser(object): #Various parsers for acting on user input
 			elif action_word == "save":
 				print "Command not yet implemented"
 			elif action_word == "verbose":
-				game_data.system.brief = False
+				system_data.brief = False
 				print "Setting Verbose, Always give full room description"
 			elif action_word == "brief":
-				game_data.system.brief = True
+				system_data.brief = True
 				print "Setting brief, Only give room full description on first visit"
 			elif action_word == "score":
 				print "Command not yet implemented"
@@ -130,12 +137,12 @@ class parser(object): #Various parsers for acting on user input
 				print "	help or ? : Displays this information"
 				print "	exit or quit or q : Exits the game"
 			
-	def look_at(self,action,location,system): #checks for description query
+	def look_at(self,action,location,system_data): #checks for description query
 		#first we get a list of describer words, and all of the location nouns
 		describers = game_data.words.describers
 		inventory = location.inventory.keys()
 		objects = location.objects.keys()
-		exits = location.exits
+		exits = location.exits.keys()
 		current_place_words = game_data.words.current_place_words
 		#now we make a master noun list
 		nouns = inventory + objects + exits + current_place_words
