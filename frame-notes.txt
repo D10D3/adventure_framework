@@ -5,22 +5,22 @@ Current Features:
 		Examine objects and locations
 		If first time in room: long description
 		If seen before: short description
+		north and n both move (+south ect...)
 	System:
 		Restart Game
 		Help Info
 		Exit Game
+		Set Verbose (always long room description)
+		Set Brief	(Unset Verbose)
 		
 Future Features (1st Priority):
 	Play:
-		north and n both move (+south ect...)
 		Player Inventory
-		Object Inventories (like a box of things)
 		Pick up and drop objects
+		Object Inventories (like a box of things)
 		game status list (events triggered)
 		Triggerable Events
 	System:
-		Set Verbose (always long room description)
-		Set Brief	(Unset Verbose)
 		
 Future Features (2nd Priority:
 	Play:

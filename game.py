@@ -9,7 +9,7 @@ class game_loop(object): #Game loop
 	def __init__(self):
 		self.map = game_data.map() 			#rooms superclass
 		self.system = game_data.system() 	#engine data
-		self.location = self.map.testroom1() #starting location
+		self.location = self.map.Study() #starting location
 
 	def play(self):
 		#instanced methods

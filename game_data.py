@@ -7,6 +7,8 @@ class system():
 	rooms_visited = [] 
 	
 	settings = [brief,rooms_visited]
+	class player():
+		player_inventory = {}
 
 #		***	Room Classes		***
 class map():
@@ -28,14 +30,14 @@ class map():
 			"Nothing":"there isn't anything here"
 			}
 		exits = {
-			'up' : "testroom1"
+			'up' : "Study"
 			}
 			
-	class testroom1(default_room):
+	class Study(default_room):
 		title = "Study"
-		short_description = "A small study"
+		short_description = "A small Study"
 		long_description = [
-			"This is a small but cozy study with book shelves,",
+			"This is a small but cozy Study with book shelves,",
 			"a wingback chair and a phonograph"
 			]
 		inventory = {
@@ -51,60 +53,66 @@ class map():
 			"phonograph":"This is a cabinet style phonograph with a large hand-crank"
 			}
 		exits = {
-			'north' : "testroom2",
-			'n' : "testroom2",
-			'e' : "testroom3",
-			'east' : "testroom3"
+			'north' : "Parlor",
+			'east' : "Ballroom"
 			}
 			
-	class testroom2(default_room):
-		title = "testroom2"
-		short_description = "This is testroom2, It's a little dirty"
+	class Parlor(default_room):
+		title = "Parlor"
+		short_description = "It is warm and inviting here"
+		long_description = [
+			"This is a parlor with polished hardwood floors, an",
+			"oriental rug, and a sofa facing a fireplace."
+			]
 		inventory = {
 			"guitar":"It's a 1968 Harmoy Rocket hollow body guitar",
 			"Tidbit":"This is black and white cat who loves cheese"
 			}
 		inventory_placed = {
-			"guitar":"A guitar leans against the wall.",
-			"Tidbit":"There is a cat named Tidbit"
+			"guitar":"A guitar leans against the sofa.",
+			"Tidbit":"There is a cat named Tidbit asleep in front of the fire"
 			}
 		objects = {
-			"car":"A 1985 Buick Grand National",
-			"futon":"A cheap futon from ikea"
+			"Sofa":"It's a Victorian style sofa with grey and dark grey vertical stripes",
+			"rug":"This oriental rug has excellent knot work and patterns",
+			"fireplace":"The brick hearth fireplace has several logs burning in it"
 			}
 		exits = {
-			'south' : "testroom1",
-			's' : "testroom1",
-			'e' : "testroom3",
-			'east' : "testroom3"
+			'south' : "Study",
+			'east' : "Ballroom"
 			}
 			
-	class testroom3(default_room):
-		title = "testroom3"
-		short_description = "This is testroom3, it smells like lemons"
+	class Ballroom(default_room):
+		title = "Ballroom"
+		short_description = "This is the Ballroom, it smells like lemons"
+		long_description = [
+			"This is a large ballroom with parquet flooring, crystal chandeliers",
+			"and a vaulted ceiling. Sunlight streams in through a domed skylight." ,
+			"There is A wooden blue box in one corner, about the size of a",
+			"phonebooth. it has a sign on it that says 'Police Box'."]
 		inventory = {
-			"pledge":"can of a lemony all all purpose surface cleaner",
-			"Noosa":"a fluffy white cat"
+			"pledge":"It's can of a lemony all all purpose surface cleaner",
+			"Noosa":"Noosa is a fluffy white cat with blue eyes."
+			}
+		inventory_placed = {
+			"pledge":"There's a can of pledge sitting on the floor",
+			"Noosa":"A white cat is sitting on the piano, her tag reads 'Noosa'."
 			}
 		objects = {
 			"piano":"It is a black baby grand piano",
-			"tardis":"It's a blue policebox, it may travel in time and space"
-			}
-		inventory_placed = {
-			"piano":"A piano sits by the tardis",
-			"tardis":"A tardis stands in the corner"
+			"tardis":"It's a blue policebox, it may travel in time and space",
+			"policebox":"It's a blue policebox, it may travel in time and space",
+			"police":"It's a blue policebox, it may travel in time and space"
 			}
 		exits = {
-			'north' : "testroom2",
-			'n' : "testroom2",
-			's' : "testroom1",
-			'south' : "testroom1"
+			'north' : "Parlor",
+			'south' : "Study"
 			}
 	
 	room_list = {
-		"testroom1":testroom1(),
-		"testroom2":testroom2(),
-		"testroom3":testroom3()
+		"Study":Study(),
+		"Parlor":Parlor(),
+		"Ballroom":Ballroom()
 		}
 
 #		***	Word Lists		***
@@ -239,3 +247,15 @@ class words(object):
 		current_place_words
 		]
 	
+	convert_direction = {
+		"north":"n",
+		"south":"s",
+		"east":"e",
+		"west":"w",
+		"northeast":"ne",
+		"southeast":"se",
+		"northwest":"nw",
+		"southwest":"sw",
+		"up":"u",
+		"down":"d"
+		}

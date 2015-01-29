@@ -5,7 +5,6 @@ class engine(object):
 	def describe_room(self,location,system_data): #print description from room data
 		print ""
 		print location.title
-		print location.short_description
 		#if new room, or verbose, print long description
 		if location.title not in system_data.rooms_visited:
 			system_data.rooms_visited.append(location.title)
@@ -16,6 +15,8 @@ class engine(object):
 			for i in location.long_description:
 				print i
 			print ""
+		else:
+			print location.short_description
 		#describe room inventory
 		for item in location.inventory.keys():
 			for placed in location.inventory_placed.keys():
@@ -47,10 +48,21 @@ class parser(object): #Various parsers for acting on user input
 		#if all of those are satisfied and it's a good command, the location is changed
 		describers = game_data.words.describers
 		nav_commands = game_data.words.nav_commands
+		converter = game_data.words.convert_direction
 		exitcheck = 0#these three are holders for checking input against lists
 		navcheck = 0 #we start assuming they are not on the list
 		looking_present = 0
 		going_to = ""
+		
+		#convert single letter directions.
+		for dir in converter:
+			conv = []
+			conv.append(converter[dir])
+			dirlist = []
+			dirlist.append(dir)
+			if action == conv:
+				action = dirlist
+		
 		
 		for action_word in action: #start processing user input
 			for look in describers:#are you just trying to look at an exit?
@@ -125,6 +137,12 @@ class parser(object): #Various parsers for acting on user input
 				quit()
 			elif action_word == "?" or "help":
 				print "Adventure Framework ver0.5 by D10d3"
+				print "   A modular adventure system"
+				print ""
+				print "In addition to the following system commands you may type any action"
+				print "that comes to mind with varying degrees of success. When interacting"
+				print "with objects try to always place the verb before the noun."
+				print "Thanks for playing."
 				print ""
 				print "System commands:"
 				print "	inv? : Lists inventory commands the player can use"
