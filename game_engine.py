@@ -2,7 +2,7 @@ import game_data
 
 class engine(object):
 
-	def describe_room(self,location,system_data): #print description from room data
+	def describe_room(self,location,system_data,items): #print description from room data
 		print ""
 		print location.title
 		#if new room, or verbose, print long description
@@ -18,24 +18,81 @@ class engine(object):
 		else:
 			print location.short_description
 		#describe room inventory
-		for item in location.inventory.keys():
-			for placed in location.inventory_placed.keys():
-				if item == placed:
-					print location.inventory_placed[item]
-
-		exits_list = "Exits: "
-		for key in location.exits:
-			exits_list += key
-			exits_list += ", "
-		print exits_list
+		print "item descriptions:"
+		for item in location.inventory:
+			print item['placed']
 		print ""
 
+	#	*** BEGIN EVENT FUNCTIONS ***
+	def event_handler(self,action,location,items,player,words,nouns): #triggers events from player input
+		#inventory router
+		for word in action:
+			if word in words.inventory_commands:
+				if word == "inventory" or "i":
+					print "Inventory:"
+					for item in player.inventory:
+						print "	%s"%item['name']
+			print""
+	def	move(): #change room
+		pass
+	def	inventory(): #add or remove player_inventory
+		pass
+	def	place_item(): #placing item: "Put jewel in box"
+		pass
+	def	change_exit(): #add or remove an exit
+		pass
+	def	change_static(): #add or remove static objects
+		pass
+	def	room_inventory(): #add or remove room_inventory
+		pass
+	def	change_mob(): #add or remove mob
+		pass
+	def	change_room_desc(): #change room descriptions
+		pass
+	def	health(): #change player health
+		pass
+	def	combat(): #initiate combat
+		pass
+	def	talk(): #initiate conversation
+		pass
 class parser(object): #Various parsers for acting on user input
 	
 	def break_words(self,action): #breaks 'action' input into a list of words
 		words = action.split(' ')
 		print"" #dumb, but helps formatting
 		return words
+	def get_nouns(self,action,location,items,player): #pull nouns from player input
+		#loc_inv = location.inventory
+		#loc_static = location.static
+		#player_inv = player.inventory
+		exits = location.exits.keys()
+		current_place_words = game_data.words.current_place_words
+		nouns = [] #holder for found nouns
+		for word in action:
+			for item in location.inventory:
+				if item['name'] == word:
+					nouns.append(item)
+			for item in location.static:
+				if item['name'] == word:
+					nouns.append(item)
+			for item in player.inventory:
+				if item['name'] == word:
+					nouns.append(item)
+		return nouns
+	def get_verb(self,action):
+		verb = ""
+		words = game_data.words()
+		verb_list = []
+		verb_list.append(words.inventory_commands)
+		verb_list.append(words.verbs)
+		verb_list.append(words.describers)
+		verb_list.append(words.nav_commands)
+		verb_list.append(words.system_commands)
+		for word in action:
+			for list in verb_list:
+				if word in list:
+					verb = word
+		return verb
 
 	def exit(self,action,location,system_data,map_data): #checks input to see if it's a move order
 		#we are checking for three things here:
@@ -137,7 +194,7 @@ class parser(object): #Various parsers for acting on user input
 				quit()
 			elif action_word == "?" or "help":
 				print "Adventure Framework ver0.5 by D10d3"
-				print "   A modular adventure system"
+				print "    -= An adventure engine =-"
 				print ""
 				print "In addition to the following system commands you may type any action"
 				print "that comes to mind with varying degrees of success. When interacting"
@@ -155,45 +212,33 @@ class parser(object): #Various parsers for acting on user input
 				print "	help or ? : Displays this information"
 				print "	exit or quit or q : Exits the game"
 			
-	def look_at(self,action,location,system_data): #checks for description query
-		#first we get a list of describer words, and all of the location nouns
+	def look_at(self,verb,nouns,location,items,player): #checks for description query
+		#first we get a list of describer words, and all of the possible nouns
 		describers = game_data.words.describers
-		inventory = location.inventory.keys()
-		objects = location.objects.keys()
+		loc_inv = location.inventory
+		loc_static = location.static
+		player_inv = player.inventory
 		exits = location.exits.keys()
 		current_place_words = game_data.words.current_place_words
-		#now we make a master noun list
-		nouns = inventory + objects + exits + current_place_words
+		present = 0 #assumes you are looking at nothing that's there.
 		
-		looking_present = 0 #assume not looking
-		noun_present = 0 #assume no noun
-		look_word = "" #holder for a query word
-		thing = ""  #holder for a noun
-		for action_word in action:
-			for i in describers:
-				if action_word == i:
-					look_word = i
-					looking_present += 1
-		
-		for action_word in action:
-			for noun in nouns:
-				if action_word == noun:
-					thing = action_word
-					noun_present += 1
-		
-		if looking_present:
-			if noun_present:
-				if thing in inventory:
-					print location.inventory[thing]
-				elif thing in objects:
-					print location.objects[thing]
-				elif thing in current_place_words:
-					for line in location.long_description:
-						print line
-				else:
-					print "You will need to go %s to find out what is there" % thing
-			if not noun_present:
-				print "%s?" % look_word
+		for word in describers:
+			if verb == word:
+				for noun in nouns:
+					print noun['desc']
+					present += 1
+		for list in game_data.words.wordlists:
+			if verb in list:
+				present +=1
+		if verb in current_place_words:
+			present += 1
+			for line in location.long_description:
+					print line
+		if verb in exits:
+			print "You will need to go %s to find out what is there" % verb
+			present += 1
+		if not present:
+			print "What are you looking at?"
 				
 	def recognized(self,action): #is known word? error message if not
 		game_datas = game_data.words.wordlists
@@ -207,4 +252,6 @@ class parser(object): #Various parsers for acting on user input
 		
 		if not known_word:
 			print "I don't understand that."
+		else:
+			return True
 		

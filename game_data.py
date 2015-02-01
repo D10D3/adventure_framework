@@ -1,57 +1,281 @@
 
 
-#		***	Game States		***
-class system():
-	brief = True #True = brief description, False = Verbose
+class items():
 	
-	rooms_visited = [] 
+	#Gear items: anything that can be equipped
+		# gear classes
+		# gear size is the amount of space gear take up in player inventory when NOT equipped
+		# equipped gear takes no bag space
+		# all armor and damage values for equipped gear are tallied to determine player stats
+		# Add a routine to the equipment swap function that will check is a gear slot of empty
+		# if a slot is empty it will place the default gear there.
+		
+	default_head = {
+		"name" : "bare-head",
+		"desc" : "You aren't wearing anything on your head",
+		"type" : "head",
+		"damage" : 0,
+		"armor" : 0,
+		"size" : 0,
+		"bag_space" : 0,
+		"placed" : "Need to define placed for item"
+		}
+	default_hand = {
+		"name" : "empty-hands",
+		"desc" : "You don't have anything readied in your hands.",
+		"type" : "hand",
+		"damage" : 1, #fist
+		"armor" : 0,
+		"size" : 0,
+		"bag_space" : 1, #held in off hand
+		"placed" : "Need to define placed for item"
+		}
+	default_body = {
+		"name" : "loin-cloth",
+		"desc" : "While it lacks in protection it at least protects your modesty",
+		"type" : "body",
+		"damage" : 0,
+		"armor" : 0,
+		"size" : 0,
+		"bag_space" : 0,
+		"placed" : "Need to define placed for item"
+		}
+	default_bag = {
+		"name" : "No-bag",
+		"desc" : "No-bag",
+		"type" : "bag",
+		"damage" : 0,
+		"armor" : 0,
+		"size" : 0,
+		"bag_space" : 0,
+		"placed" : "Need to define placed for item"
+		}
+	default_special = {
+		"name" : "quick-wit",
+		"desc" : "Mom always said you were smart",
+		"type": "special",
+		"damage": 0,
+		"armor": 0,
+		"size": 0,
+		"bag_space" : 0,
+		"placed" : "Need to define placed for item"
+		}
+		
+	wizard_hat = {
+		"name" : "wizard-hat",
+		"desc" : "This enchanted blue hat is embroidered with stars",
+		"type": "head",
+		"damage": 1, #+1 "damage"from enchantment
+		"size" : 1,
+		"placed" : "There's a wizard-hat here.",
+		}
+	wand = {
+		"name" : "wand",
+		"desc" : "This wand is finely carved from a dark wood and inscribed with runes",
+		"type" : "hand",
+		"size" : 1,
+		"damage": 4,
+		"placed" : "Need to define placed for item"
+		}
+	robes = {
+		"name" : "robes",
+		"desc" : "While somewhat travel worn, these blue robes are quite comfy.",
+		"type": "body",
+		"size": 1,
+		"armor": 1,
+		"placed" : "Need to define placed for item"
+		}
+	satchel = {
+		"name" : "satchel",
+		"desc" : "This is a brown leather satchel with a shoulder strap.",
+		"type": "bag",
+		"size": 2,
+		"bag_space" : 6, 
+		"inventory":None,
+		"placed" : "Need to define placed for item"
+		}
+	ring_protection = {
+			"name" : "ring-protection",
+			"desc" : "An old wizard gave you this ring, it's enchantment helps deflect blows",
+			"type": "special",
+			"damage": 0,
+			"armor": 1,
+			"size": 0, #small objects don't effect bag space
+			"placed" : "Need to define placed for item"
+			}
+	#Inventory Items:	: anything that can be carried
+	# item = {
+		# "name":"",
+		# "desc":"",
+		# "placed":"",
+		# "event":""
+		# }
+	record = {
+		"name":"record",
+		"desc":"This is a resin platter record in a sleeve labeled 'Blue Danube'",
+		"placed":"There is a record here",
+		"event":None
+		}
+	Emma = {
+		"name":"Emma",
+		"desc":"This fat grey tabby cat has a tag that reads 'Emma'",
+		"placed":"There is a cat curled up here named Emma",
+		"event":None
+		}
+	Tidbit= {
+		"name":"Tidbit",
+		"desc":"This is black and white cat who loves cheese",
+		"placed":"There is a cat named Tidbit here.",
+		"event":None
+		}
+	guitar = {
+		"name":"guitar",
+		"desc":"It's a 1968 Harmoy Rocket hollow body guitar",
+		"placed":"A guitar leans against the sofa.",
+		"event":None
+		}
+	pledge = {
+		"name":"pledge",
+		"desc":"It's can of a lemony all all purpose surface cleaner",
+		"placed":"There's a can of pledge sitting on the floor",
+		"event":None
+		}
+	Noosa = {
+			"name":"Noosa",
+			"desc":"Noosa is a fluffy white cat with blue eyes.",
+			"placed":"A white cat is sitting here, her tag reads 'Noosa'.",
+			"event":None
+			}
+		
+			
+#STATIC Items: things that can't move but can be interacted with
+		#the eventual layout of static objects will be determined by the event 
+		#handler. For now they just have a name and a description. 
+		#The event variable is just a place holder for future formatting. 
+	# static = {
+		# "name":"",
+		# "desc":"",
+		# "event":None,
+		# "container":False,
+		# "inventory":"",
+		# "space":0
+		# }
+	chair = {
+		"name":"chair",
+		"desc":"This is a large wingback style chair upholstered in red velvet.",
+		"event":None,
+		"container":True,
+		"inventory":[],
+		"space":1
+		}
+	phonograph = {
+		"name":"phonograph",
+		"desc":"This is a cabinet style phonograph with a large hand-crank.",
+		"event":None,
+		"inventory":[],
+		"space":1,
+		}
+	sofa = {
+		"name":"sofa",
+		"desc":"It's a Victorian style sofa with grey and dark grey vertical stripes",
+		"event":None,
+		"container":False,
+		"inventory":"",
+		"space":0,
+		}
+	rug = {
+		"name":"rug",
+		"desc":"This oriental rug has excellent knot work and patterns",
+		"event":None,
+		"container":False,
+		"inventory":"",
+		"space":0,
+		}
+	fireplace = {
+		"name":"fireplace",
+		"desc":"The brick hearth fireplace has several logs burning in it",
+		"event":None,
+		"container":False,
+		"inventory":"",
+		"space":0
+		}
+	piano = {
+		"name":"piano",
+		"desc":"It is a black baby grand piano",
+		"event":None,
+		"container":False,
+		"inventory":"",
+		"space":0
+		}
+	tardis = {
+		"name":"tardis",
+		"desc":"It's a blue policebox, it may travel in time and space",
+		"event":None,
+		"container":False,
+		"inventory":"",
+		"space":0
+		}
+	policebox = tardis
+	police = tardis
+	gear = [
+		default_head,
+		default_hand,
+		default_body,
+		default_bag,
+		default_special,
+		wizard_hat,
+		wand,
+		robes,
+		satchel,
+		ring_protection]
+	inventory = [
+		record,
+		Emma,
+		Tidbit,
+		guitar,
+		pledge,
+		Noosa]
+	static = [
+		chair,
+		phonograph,
+		sofa,
+		rug,
+		fireplace,
+		piano,
+		tardis,
+		policebox,
+		police]
 	
-	settings = [brief,rooms_visited]
-	class player():
-		player_inventory = {}
 
+	
 #		***	Room Classes		***
 class map():
-		
+	
 	class default_room(object): #parent for room classes, fills in missing info with place holders
 		title = "Undefined Room"
 		short_description = "A white empty room"
 		long_description = [
 			"This is a white nondescript space awaiting data to describe it, ",
 			"Like the 'Construct' in The Matrix"
+			"You don't see any obvious exits, but you think 'up' will work"
 			]
-		inventory = {
-			"nothing":"there is nothing there"
-			}
-		inventory_placed = {
-			"nothing":"There are no visible objects",
-			}
-		objects = {
-			"Nothing":"there isn't anything here"
-			}
+		inventory = []
+		static = []
 		exits = {
 			'up' : "Study"
 			}
 			
 	class Study(default_room):
+		#def __inti__():
+		items = items()
 		title = "Study"
 		short_description = "A small Study"
 		long_description = [
 			"This is a small but cozy Study with book shelves,",
-			"a wingback chair and a phonograph"
+			"a wingback chair and a phonograph. Doors lead north and east"
 			]
-		inventory = {
-			"record":"This is a resin platter record in a sleeve labeled 'Blue Danube'",
-			"Emma":"This fat grey tabby cat has a tag that reads 'Emma'"
-			}
-		inventory_placed = {
-			"record":"There is a record by the phonograph",
-			"Emma":"There is a cat curled up on the chair named Emma"
-			}
-		objects = {
-			"chair":"This is a large wingback style chair upholstered in red velvet.",
-			"phonograph":"This is a cabinet style phonograph with a large hand-crank"
-			}
+		inventory = [items.record,items.Emma]
+		static = [items.chair,items.phonograph]
 		exits = {
 			'north' : "Parlor",
 			'east' : "Ballroom"
@@ -62,21 +286,10 @@ class map():
 		short_description = "It is warm and inviting here"
 		long_description = [
 			"This is a parlor with polished hardwood floors, an",
-			"oriental rug, and a sofa facing a fireplace."
+			"oriental rug, and a sofa facing a fireplace. Doors lead south and east"
 			]
-		inventory = {
-			"guitar":"It's a 1968 Harmoy Rocket hollow body guitar",
-			"Tidbit":"This is black and white cat who loves cheese"
-			}
-		inventory_placed = {
-			"guitar":"A guitar leans against the sofa.",
-			"Tidbit":"There is a cat named Tidbit asleep in front of the fire"
-			}
-		objects = {
-			"Sofa":"It's a Victorian style sofa with grey and dark grey vertical stripes",
-			"rug":"This oriental rug has excellent knot work and patterns",
-			"fireplace":"The brick hearth fireplace has several logs burning in it"
-			}
+		inventory = [items.guitar,items.Tidbit]
+		static = [items.sofa,items.rug,items.fireplace]
 		exits = {
 			'south' : "Study",
 			'east' : "Ballroom"
@@ -89,21 +302,10 @@ class map():
 			"This is a large ballroom with parquet flooring, crystal chandeliers",
 			"and a vaulted ceiling. Sunlight streams in through a domed skylight." ,
 			"There is A wooden blue box in one corner, about the size of a",
-			"phonebooth. it has a sign on it that says 'Police Box'."]
-		inventory = {
-			"pledge":"It's can of a lemony all all purpose surface cleaner",
-			"Noosa":"Noosa is a fluffy white cat with blue eyes."
-			}
-		inventory_placed = {
-			"pledge":"There's a can of pledge sitting on the floor",
-			"Noosa":"A white cat is sitting on the piano, her tag reads 'Noosa'."
-			}
-		objects = {
-			"piano":"It is a black baby grand piano",
-			"tardis":"It's a blue policebox, it may travel in time and space",
-			"policebox":"It's a blue policebox, it may travel in time and space",
-			"police":"It's a blue policebox, it may travel in time and space"
-			}
+			"phonebooth. it has a sign on it that says 'Police Box'.",
+			"Doors lead north and south"]
+		inventory = [items.Noosa,items.pledge]
+		static = [items.piano,items.tardis,items.policebox,items.police]
 		exits = {
 			'north' : "Parlor",
 			'south' : "Study"
@@ -114,6 +316,7 @@ class map():
 		"Parlor":Parlor(),
 		"Ballroom":Ballroom()
 		}
+	starting_room = Study()
 
 #		***	Word Lists		***
 
@@ -140,7 +343,7 @@ class words(object):
 		"get",
 		"take",
 		"equip",
-		"put on",
+		"put",
 		"wear",
 		"drop",
 		"throw"
@@ -259,3 +462,14 @@ class words(object):
 		"up":"u",
 		"down":"d"
 		}
+
+#		***	Game States		***
+class system():
+	brief = True #True = brief description, False = Verbose
+	
+	rooms_visited = [] 
+	
+	settings = [brief,rooms_visited]
+class player():
+	items = items()
+	inventory = [items.wand]

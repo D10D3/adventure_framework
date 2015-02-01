@@ -21,6 +21,7 @@ Future Features (1st Priority):
 		game status list (events triggered)
 		Triggerable Events
 	System:
+		move "g" to system verbs and apply to function
 		
 Future Features (2nd Priority:
 	Play:
