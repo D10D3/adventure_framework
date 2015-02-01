@@ -334,7 +334,8 @@ class words(object):
 		"brief",
 		"score",
 		"inv?",
-		"q"
+		"q",
+		"clear",
 		]
 		
 	inventory_commands = [
@@ -439,7 +440,8 @@ class words(object):
 		"place",
 		"location"
 		]
-		
+
+	
 	wordlists = [
 		inventory_commands,
 		system_commands,

@@ -27,20 +27,25 @@ class game_loop(object): #Game loop
 			action = parser.break_words(action)
 			nouns = []
 			verb = ""
+			event = ""
 			#now run the input list against a number of word checkers in the parser
 			recognized = parser.recognized(action) 				#returns error message if all words unknown
 			if recognized == True:
 				nouns = parser.get_nouns(action,self.location,self.items,self.player)#get nouns from input
 				verb = parser.get_verb(action)
-				engine.event_handler(action,self.location,self.items,self.player,self.words,nouns) #checks for and handles events
-				profanity = parser.profanity(action) 					#swearing?
-				self.location = parser.exit(action,self.location,self.system,self.map) 	#moving to another room?
+				profanity = parser.profanity(action) 	#swearing?
 				look_at = parser.look_at(verb,nouns,self.location,self.items,self.player) 	#looking at an object?
-				system = parser.system(action,self.system) 			#system command?
+				#begin events
+				event = engine.event_handler(self.location,self.items,self.player,self.words,nouns,verb) #checks events
+				if event == "get" or "drop":
+					engine.inventory(event,self.location,self.items,self.player,nouns,verb)
+				
+				self.location = parser.exit(action,self.location,self.system,self.map) 	#moving to another room?
+				system = parser.system(self.system,verb)		#system command?
 				if system: #if parser.system receives "restart" it sets system to True
 					restart = game_loop() #creates new game_loop instance
 					restart.play() #starts new game loop
-				
+			print""	
 
 start = game_loop() #instantiate game_loop
 start.play() #start game loop

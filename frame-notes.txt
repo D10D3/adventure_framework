@@ -6,17 +6,18 @@ Current Features:
 		If first time in room: long description
 		If seen before: short description
 		north and n both move (+south ect...)
+		Player Inventory
+		Pick up and drop objects
 	System:
 		Restart Game
 		Help Info
 		Exit Game
 		Set Verbose (always long room description)
 		Set Brief	(Unset Verbose)
+		clear screen
 		
 Future Features (1st Priority):
 	Play:
-		Player Inventory
-		Pick up and drop objects
 		Object Inventories (like a box of things)
 		game status list (events triggered)
 		Triggerable Events

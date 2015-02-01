@@ -1,5 +1,5 @@
 import game_data
-
+import os
 class engine(object):
 
 	def describe_room(self,location,system_data,items): #print description from room data
@@ -14,7 +14,6 @@ class engine(object):
 		elif system_data.brief == False:
 			for i in location.long_description:
 				print i
-			print ""
 		else:
 			print location.short_description
 		#describe room inventory
@@ -24,19 +23,44 @@ class engine(object):
 		print ""
 
 	#	*** BEGIN EVENT FUNCTIONS ***
-	def event_handler(self,action,location,items,player,words,nouns): #triggers events from player input
+	def event_handler(self,location,items,player,words,nouns,verb): #triggers events from player input
 		#inventory router
-		for word in action:
-			if word in words.inventory_commands:
-				if word == "inventory" or "i":
-					print "Inventory:"
-					for item in player.inventory:
-						print "	%s"%item['name']
-			print""
+		
+		if verb in words.inventory_commands:
+			if verb == "inventory":
+				print "Inventory:"
+				for item in player.inventory:
+					print "	%s"%item['name']
+			elif verb == "i":
+				print "Inventory:"
+				for item in player.inventory:
+					print "	%s"%item['name']					
+			elif verb == "get":
+				return "get"	
+			elif verb == "take":
+				return "get"					
+			elif verb == "drop":
+				return "drop"
+
 	def	move(): #change room
 		pass
-	def	inventory(): #add or remove player_inventory
-		pass
+	def	inventory(self,action,location,items,player,nouns,verb): #add or remove player_inventory
+		if action == "get":
+			for noun in nouns:
+				for item in location.inventory:
+					if noun == item:
+						location.inventory.remove(item)
+						player.inventory.append(item)
+						print "you get %s" % item['name']
+		elif action == "drop":
+			for noun in nouns:
+				for item in player.inventory:
+					if noun == item:
+						location.inventory.append(item)
+						player.inventory.remove(item)
+						print "you drop %s" % item['name']
+		
+				
 	def	place_item(): #placing item: "Put jewel in box"
 		pass
 	def	change_exit(): #add or remove an exit
@@ -66,7 +90,6 @@ class parser(object): #Various parsers for acting on user input
 		#loc_static = location.static
 		#player_inv = player.inventory
 		exits = location.exits.keys()
-		current_place_words = game_data.words.current_place_words
 		nouns = [] #holder for found nouns
 		for word in action:
 			for item in location.inventory:
@@ -80,6 +103,7 @@ class parser(object): #Various parsers for acting on user input
 					nouns.append(item)
 		return nouns
 	def get_verb(self,action):
+		current_place_words = game_data.words.current_place_words
 		verb = ""
 		words = game_data.words()
 		verb_list = []
@@ -92,6 +116,12 @@ class parser(object): #Various parsers for acting on user input
 			for list in verb_list:
 				if word in list:
 					verb = word
+		for desc in words.describers:
+			if verb == desc:
+				for word in current_place_words:
+					for action_word in action:
+						if action_word == word:
+							verb = "look here"
 		return verb
 
 	def exit(self,action,location,system_data,map_data): #checks input to see if it's a move order
@@ -158,59 +188,56 @@ class parser(object): #Various parsers for acting on user input
 		if cursing:
 			print "Such language!"
 			
-	def system(self,action,system_data): #checks for system commands
+	def system(self,system_data,verb): #checks for system commands
 		system_commands = game_data.words.system_commands
-		is_system = 0 #assume action is not a system command
-		system_action = "" #sets space for detected system command
-		for action_word in action:
-			for i in system_commands:
-				if action_word == i:
-					system_action = action_word
-					is_system += 1
-
-		if is_system:
-			if action_word == "inv?":
-				for inv_word in game_data.words.inventory_commands:
-					print inv_word 
-			elif action_word == "load":
-				print "Command not yet implemented"
-			elif action_word == "save":
-				print "Command not yet implemented"
-			elif action_word == "verbose":
-				system_data.brief = False
-				print "Setting Verbose, Always give full room description"
-			elif action_word == "brief":
-				system_data.brief = True
-				print "Setting brief, Only give room full description on first visit"
-			elif action_word == "score":
-				print "Command not yet implemented"
-			elif action_word == "restart":
-				return True
-			elif action_word == "quit":
-				quit()
-			elif action_word == "exit":
-				quit()
-			elif action_word == "q":
-				quit()
-			elif action_word == "?" or "help":
-				print "Adventure Framework ver0.5 by D10d3"
-				print "    -= An adventure engine =-"
-				print ""
-				print "In addition to the following system commands you may type any action"
-				print "that comes to mind with varying degrees of success. When interacting"
-				print "with objects try to always place the verb before the noun."
-				print "Thanks for playing."
-				print ""
-				print "System commands:"
-				print "	inv? : Lists inventory commands the player can use"
-				print "	load : Command not yet implemented"
-				print "	save : Command not yet implemented"
-				print "	verbose : Always give full room description"
-				print "	brief : Only give room full description on first visit"
-				print "	score : Command not yet implemented"
-				print "	restart : Restarts the game"
-				print "	help or ? : Displays this information"
-				print "	exit or quit or q : Exits the game"
+		for word in system_commands:
+			if verb == word:
+				if verb == "inv?":
+					for inv_word in game_data.words.inventory_commands:
+						print inv_word 
+				elif verb == "load":
+					print "Command not yet implemented"
+				elif verb == "save":
+					print "Command not yet implemented"
+				elif verb == "verbose":
+					system_data.brief = False
+					print "Setting Verbose, Always give full room description"
+				elif verb == "brief":
+					system_data.brief = True
+					print "Setting brief, Only give room full description on first visit"
+				elif verb == "score":
+					print "Command not yet implemented"
+				elif verb == "restart":
+					return True
+				elif verb == "quit":
+					quit()
+				elif verb == "exit":
+					quit()
+				elif verb == "q":
+					quit()
+				elif verb == "clear":
+					os.system('cls')
+				elif verb == "?" or "help":
+					print "Adventure Framework ver0.5 by D10d3"
+					print "    -= An adventure engine =-"
+					print ""
+					print "In addition to the following system commands you may type any action"
+					print "that comes to mind with varying degrees of success. When interacting"
+					print "with objects try to always place the verb before the noun."
+					print "Thanks for playing."
+					print ""
+					print "System commands:"
+					print "	clear = Clear the screen"
+					print "	inv? : Lists inventory commands the player can use"
+					print "	load : Command not yet implemented"
+					print "	save : Command not yet implemented"
+					print "	verbose : Always give full room description"
+					print "	brief : Only give room full description on first visit"
+					print "	score : Command not yet implemented"
+					print "	restart : Restarts the game"
+					print "	help or ? : Displays this information"
+					print "	exit or quit or q : Exits the game"
+	
 			
 	def look_at(self,verb,nouns,location,items,player): #checks for description query
 		#first we get a list of describer words, and all of the possible nouns
@@ -219,9 +246,12 @@ class parser(object): #Various parsers for acting on user input
 		loc_static = location.static
 		player_inv = player.inventory
 		exits = location.exits.keys()
-		current_place_words = game_data.words.current_place_words
+		#current_place_words = game_data.words.current_place_words
 		present = 0 #assumes you are looking at nothing that's there.
-		
+		if verb == "look here":
+			present += 1
+			for i in location.long_description:
+				print i
 		for word in describers:
 			if verb == word:
 				for noun in nouns:
@@ -230,10 +260,7 @@ class parser(object): #Various parsers for acting on user input
 		for list in game_data.words.wordlists:
 			if verb in list:
 				present +=1
-		if verb in current_place_words:
-			present += 1
-			for line in location.long_description:
-					print line
+		
 		if verb in exits:
 			print "You will need to go %s to find out what is there" % verb
 			present += 1
