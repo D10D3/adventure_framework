@@ -46,20 +46,27 @@ class engine(object):
 		pass
 	def	inventory(self,action,location,items,player,nouns,verb): #add or remove player_inventory
 		if action == "get":
+			get_true = False
 			for noun in nouns:
 				for item in location.inventory:
 					if noun == item:
+						get_true = True
 						location.inventory.remove(item)
 						player.inventory.append(item)
 						print "you get %s" % item['name']
+			if not get_true:
+				print "You can't get that."
 		elif action == "drop":
+			drop_true = False
 			for noun in nouns:
 				for item in player.inventory:
 					if noun == item:
+						drop_true = True
 						location.inventory.append(item)
 						player.inventory.remove(item)
 						print "you drop %s" % item['name']
-		
+			if not drop_true:
+				print "You don't have that!"
 				
 	def	place_item(): #placing item: "Put jewel in box"
 		pass
@@ -116,12 +123,27 @@ class parser(object): #Various parsers for acting on user input
 			for list in verb_list:
 				if word in list:
 					verb = word
+		#this ugly chunk determines if you are looking at your location
+		if action[0] == "l":
+			verb = "look here"
 		for desc in words.describers:
 			if verb == desc:
 				for word in current_place_words:
 					for action_word in action:
 						if action_word == word:
-							verb = "look here"
+							verb = "look here" #look_at() looks for this specific phrase
+		#this ugly chunk determines if you are looking at a direction			
+		look_dir_desc = False
+		look_dir_dir = False
+		for desc in words.describers:
+			for action_word in action:
+				if action_word == desc:
+					look_dir_desc = True
+				for word in words.nav_commands:
+					if action_word == word:
+						look_dir_dir = True
+						if look_dir_desc and look_dir_dir:
+							verb = "look direction" #look_at() looks for this specific phrase
 		return verb
 
 	def exit(self,action,location,system_data,map_data): #checks input to see if it's a move order
@@ -228,6 +250,7 @@ class parser(object): #Various parsers for acting on user input
 					print ""
 					print "System commands:"
 					print "	clear = Clear the screen"
+					print "	g = repeat last action"
 					print "	inv? : Lists inventory commands the player can use"
 					print "	load : Command not yet implemented"
 					print "	save : Command not yet implemented"
@@ -249,9 +272,13 @@ class parser(object): #Various parsers for acting on user input
 		#current_place_words = game_data.words.current_place_words
 		present = 0 #assumes you are looking at nothing that's there.
 		if verb == "look here":
+			print "You look around."
 			present += 1
 			for i in location.long_description:
 				print i
+		if verb == "look direction":
+			print "You will need to go there to find out what's there."
+			present += 1
 		for word in describers:
 			if verb == word:
 				for noun in nouns:
@@ -260,10 +287,6 @@ class parser(object): #Various parsers for acting on user input
 		for list in game_data.words.wordlists:
 			if verb in list:
 				present +=1
-		
-		if verb in exits:
-			print "You will need to go %s to find out what is there" % verb
-			present += 1
 		if not present:
 			print "What are you looking at?"
 				

@@ -19,12 +19,15 @@ class game_loop(object): #Game loop
 		#instanced methods
 		engine = game_engine.engine() #engine classes
 		parser = game_engine.parser() #parser classes
-		
+		last_input = "look here"
 		while True:
 			engine.describe_room(self.location,self.system,self.items)			
 			#get user input, then break it down into a list of words
-			action = raw_input("Command?> ")
-			action = parser.break_words(action)
+			input = raw_input("Command?> ")
+			if input == "g":
+				input = last_action
+			last_action = input
+			action = parser.break_words(input)
 			nouns = []
 			verb = ""
 			event = ""
@@ -45,7 +48,8 @@ class game_loop(object): #Game loop
 				if system: #if parser.system receives "restart" it sets system to True
 					restart = game_loop() #creates new game_loop instance
 					restart.play() #starts new game loop
-			print""	
+			print""
+			
 
 start = game_loop() #instantiate game_loop
 start.play() #start game loop

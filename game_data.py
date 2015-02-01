@@ -411,7 +411,8 @@ class words(object):
 		"examine",
 		"describe",
 		"scan",
-		"what"
+		"what",
+		"l",
 		]
 		
 	profanity = [
