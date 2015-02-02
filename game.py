@@ -42,7 +42,9 @@ class game_loop(object): #Game loop
 				event = engine.event_handler(self.location,self.items,self.player,self.words,nouns,verb) #checks events
 				if event == "get" or "drop":
 					engine.inventory(event,self.location,self.items,self.player,nouns,verb)
-				
+				if event == "put" or "get from":
+					engine.place_item(event,self.location,self.items,self.player,nouns,verb)
+					
 				self.location = parser.exit(action,self.location,self.system,self.map) 	#moving to another room?
 				system = parser.system(self.system,verb)		#system command?
 				if system: #if parser.system receives "restart" it sets system to True

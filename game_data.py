@@ -68,6 +68,7 @@ class items():
 		"damage": 1, #+1 "damage"from enchantment
 		"size" : 1,
 		"placed" : "There's a wizard-hat here.",
+		"container":False,
 		}
 	wand = {
 		"name" : "wand",
@@ -75,7 +76,8 @@ class items():
 		"type" : "hand",
 		"size" : 1,
 		"damage": 4,
-		"placed" : "Need to define placed for item"
+		"placed" : "Need to define placed for item",
+		"container":False,
 		}
 	robes = {
 		"name" : "robes",
@@ -91,8 +93,9 @@ class items():
 		"type": "bag",
 		"size": 2,
 		"bag_space" : 6, 
-		"inventory":None,
-		"placed" : "Need to define placed for item"
+		"inventory":[],
+		"placed" : "Need to define placed for item",
+		"container":True,
 		}
 	ring_protection = {
 			"name" : "ring-protection",
@@ -101,7 +104,8 @@ class items():
 			"damage": 0,
 			"armor": 1,
 			"size": 0, #small objects don't effect bag space
-			"placed" : "Need to define placed for item"
+			"placed" : "Need to define placed for item",
+			"container":False,
 			}
 	#Inventory Items:	: anything that can be carried
 	# item = {
@@ -114,38 +118,53 @@ class items():
 		"name":"record",
 		"desc":"This is a resin platter record in a sleeve labeled 'Blue Danube'",
 		"placed":"There is a record here",
-		"event":None
+		"event":None,
+		"container":False,
 		}
 	Emma = {
 		"name":"Emma",
 		"desc":"This fat grey tabby cat has a tag that reads 'Emma'",
 		"placed":"There is a cat curled up here named Emma",
-		"event":None
+		"event":None,
+		"container":False,
 		}
 	Tidbit= {
 		"name":"Tidbit",
 		"desc":"This is black and white cat who loves cheese",
 		"placed":"There is a cat named Tidbit here.",
-		"event":None
+		"event":None,
+		"container":False,
 		}
 	guitar = {
 		"name":"guitar",
 		"desc":"It's a 1968 Harmoy Rocket hollow body guitar",
 		"placed":"A guitar leans against the sofa.",
-		"event":None
+		"event":None,
+		"container":False,
 		}
 	pledge = {
 		"name":"pledge",
 		"desc":"It's can of a lemony all all purpose surface cleaner",
 		"placed":"There's a can of pledge sitting on the floor",
-		"event":None
+		"event":None,
+		"container":False,
 		}
 	Noosa = {
 			"name":"Noosa",
 			"desc":"Noosa is a fluffy white cat with blue eyes.",
 			"placed":"A white cat is sitting here, her tag reads 'Noosa'.",
-			"event":None
+			"event":None,
+			"container":False,
 			}
+	crate = {
+		"name":"crate",
+		"desc":"This is a small wooden open topped crate.",
+		"placed":"there is a crate here",
+		"event":None,
+		"container":True,
+		"inventory":[],
+		"space":1,
+		}
 		
 			
 #STATIC Items: things that can't move but can be interacted with
@@ -164,7 +183,7 @@ class items():
 		"name":"chair",
 		"desc":"This is a large wingback style chair upholstered in red velvet.",
 		"event":None,
-		"container":True,
+		"container":False,
 		"inventory":[],
 		"space":1
 		}
@@ -172,7 +191,8 @@ class items():
 		"name":"phonograph",
 		"desc":"This is a cabinet style phonograph with a large hand-crank.",
 		"event":None,
-		"inventory":[],
+		"container":True,
+		"inventory":[record],
 		"space":1,
 		}
 	sofa = {
@@ -274,7 +294,7 @@ class map():
 			"This is a small but cozy Study with book shelves,",
 			"a wingback chair and a phonograph. Doors lead north and east"
 			]
-		inventory = [items.record,items.Emma]
+		inventory = [items.crate,items.Emma]
 		static = [items.chair,items.phonograph]
 		exits = {
 			'north' : "Parlor",
@@ -326,7 +346,6 @@ class words(object):
 		"load",
 		"save",
 		"quit",
-		"exit",
 		"restart",
 		"help",
 		"?",
@@ -347,7 +366,8 @@ class words(object):
 		"put",
 		"wear",
 		"drop",
-		"throw"
+		"throw",
+		"from",
 		]
 
 	nav_commands = [
@@ -380,8 +400,8 @@ class words(object):
 		"s",
 		"p",
 		"climb",
-		"in",
-		"out",
+		"enter",
+		"exit",
 		"enter",
 		"go"
 		]

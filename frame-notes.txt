@@ -20,6 +20,9 @@ Current Features:
 Future Features (1st Priority):
 	Play:
 		Object Inventories (like a box of things)
+		inventory limits
+		inventory "all" command
+		Use Fireplace for secret door event test
 		game status list (events triggered)
 		Triggerable Events
 	System:

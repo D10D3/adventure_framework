@@ -41,6 +41,10 @@ class engine(object):
 				return "get"					
 			elif verb == "drop":
 				return "drop"
+			elif verb == "put":
+				return "put"
+			elif verb == "from":
+				return "get from"
 
 	def	move(): #change room
 		pass
@@ -68,8 +72,87 @@ class engine(object):
 			if not drop_true:
 				print "You don't have that!"
 				
-	def	place_item(): #placing item: "Put jewel in box"
-		pass
+	def	place_item(self,action,location,items,player,nouns,verb): #placing item: "Put jewel in box"
+		to_put = []
+		put_in = []
+		take_from = []
+		thing = False
+		place = False
+		if action == "put":
+			for noun in nouns:
+				for item in player.inventory:
+					if noun == item:
+						#print "for player inventory:"
+						#print "to_put is set to: %s" % item['name']
+						to_put = item
+						thing = True
+			for noun in nouns:
+				for item in location.inventory:
+					if item['container'] == True:
+						if noun == item:
+							#print "for location inventory:"
+							#print "Put_in is set to: %s" % item['name']
+							put_in = item
+							place = True
+			for noun in nouns:
+				for item in location.static:
+					if item['container'] == True:
+						if noun == item:
+							#print "for static inventory:"
+							#print "Put_in is set to: %s" % item['name']
+							put_in = item
+							place = True
+			if thing and place:
+				player.inventory.remove(to_put)
+				put_in['inventory'].append(to_put)
+				print "You put the %s in the %s."% (to_put['name'],put_in['name'])
+			else:
+				print "Put what where? I'm confused."
+		
+		if action == "get from":
+			for noun in nouns:
+				for item in location.inventory:
+					if item['container'] == True:
+						for object in item['inventory']:
+							if noun == object:
+								print "for static inventory:"
+								print "to_put is set to: %s" % object['name']
+								to_put = object
+								thing = True
+							if noun == item:
+								print "for static inventory:"
+								print "take_from is set to: %s" % item['name']
+								take_from = item
+								place = True
+			for noun in nouns:
+				for item in location.static:
+					if item['container'] == True:
+						for object in item['inventory']:
+							if noun == object:
+								#print "for static inventory:"
+								#print "to_put is set to: %s" % object['name']
+								to_put = object
+								thing = True
+							if noun == item:
+								#print "for static inventory:"
+								#print "take_from is set to: %s" % item['name']
+								take_from = item
+								place = True
+								
+			if thing and place:
+				for item in take_from['inventory']:
+					#print item['name']
+					#print to_put['name']
+					if to_put == item:
+						player.inventory.append(to_put)
+						take_from['inventory'].remove(to_put)
+						print "You get the %s" % to_put['name']
+					else:
+						print "Get what from where? I'm confused."
+			else:
+				print "Get what from where? I'm confused."
+				
+			
 	def	change_exit(): #add or remove an exit
 		pass
 	def	change_static(): #add or remove static objects
@@ -102,9 +185,17 @@ class parser(object): #Various parsers for acting on user input
 			for item in location.inventory:
 				if item['name'] == word:
 					nouns.append(item)
+				elif item['container'] == True:
+					for object in item['inventory']:
+						if object['name'] == word:
+							nouns.append(object)
 			for item in location.static:
 				if item['name'] == word:
 					nouns.append(item)
+				elif item['container'] == True:
+					for object in item['inventory']:
+						if object['name'] == word:
+							nouns.append(object)
 			for item in player.inventory:
 				if item['name'] == word:
 					nouns.append(item)
@@ -233,8 +324,6 @@ class parser(object): #Various parsers for acting on user input
 					return True
 				elif verb == "quit":
 					quit()
-				elif verb == "exit":
-					quit()
 				elif verb == "q":
 					quit()
 				elif verb == "clear":
@@ -259,7 +348,7 @@ class parser(object): #Various parsers for acting on user input
 					print "	score : Command not yet implemented"
 					print "	restart : Restarts the game"
 					print "	help or ? : Displays this information"
-					print "	exit or quit or q : Exits the game"
+					print "	quit or q : Exits the game"
 	
 			
 	def look_at(self,verb,nouns,location,items,player): #checks for description query
@@ -283,6 +372,10 @@ class parser(object): #Various parsers for acting on user input
 			if verb == word:
 				for noun in nouns:
 					print noun['desc']
+					if noun['inventory']:
+						print "%s contains:" % noun['name']
+						for item in noun['inventory']:
+							print item['name']
 					present += 1
 		for list in game_data.words.wordlists:
 			if verb in list:
